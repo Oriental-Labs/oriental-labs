@@ -1,0 +1,160 @@
+'use client';
+
+import { useActionState } from 'react';
+import { saveSettingsAction } from './actions';
+import type { SiteSettings } from '@/types/settings';
+
+interface Props {
+  settings: SiteSettings;
+}
+
+const initialState = { error: null, ok: false };
+
+function Toggle({ name, label, defaultChecked }: { name: string; label: string; defaultChecked: boolean }) {
+  return (
+    <label className="flex items-center justify-between gap-4 cursor-pointer">
+      <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{label}</span>
+      <div className="relative flex-shrink-0">
+        <input
+          type="checkbox"
+          name={name}
+          defaultChecked={defaultChecked}
+          className="sr-only peer"
+        />
+        <div className="w-9 h-5 rounded-full bg-slate-200 dark:bg-navy-700 peer-checked:bg-electric-400 transition-colors" />
+        <div className="absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-transform peer-checked:translate-x-4" />
+      </div>
+    </label>
+  );
+}
+
+function Field({ label, name, defaultValue, placeholder, type = 'text' }: {
+  label: string; name: string; defaultValue?: string | null; placeholder?: string; type?: string;
+}) {
+  return (
+    <div>
+      <label htmlFor={name} className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">
+        {label}
+      </label>
+      <input
+        id={name}
+        name={name}
+        type={type}
+        defaultValue={defaultValue ?? ''}
+        placeholder={placeholder}
+        className="w-full px-3 py-2 rounded-lg text-sm bg-white dark:bg-navy-800/60 border border-slate-200 dark:border-navy-600/50 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-electric-400/60 focus:ring-1 focus:ring-electric-400/30 transition-colors"
+      />
+    </div>
+  );
+}
+
+function Textarea({ label, name, defaultValue, placeholder }: {
+  label: string; name: string; defaultValue?: string | null; placeholder?: string;
+}) {
+  return (
+    <div>
+      <label htmlFor={name} className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">
+        {label}
+      </label>
+      <textarea
+        id={name}
+        name={name}
+        rows={2}
+        defaultValue={defaultValue ?? ''}
+        placeholder={placeholder}
+        className="w-full px-3 py-2 rounded-lg text-sm bg-white dark:bg-navy-800/60 border border-slate-200 dark:border-navy-600/50 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-electric-400/60 focus:ring-1 focus:ring-electric-400/30 transition-colors resize-none"
+      />
+    </div>
+  );
+}
+
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="rounded-xl border border-slate-200 dark:border-navy-700/40 overflow-hidden">
+      <div className="bg-slate-100 dark:bg-navy-900/60 px-5 py-3 border-b border-slate-200 dark:border-navy-700/40">
+        <h2 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{title}</h2>
+      </div>
+      <div className="bg-white dark:bg-transparent p-5 space-y-4">{children}</div>
+    </div>
+  );
+}
+
+export function SettingsForm({ settings }: Props) {
+  const [state, formAction, pending] = useActionState(saveSettingsAction, initialState);
+
+  return (
+    <form action={formAction} className="space-y-6">
+      {state.ok && (
+        <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/25 text-emerald-600 dark:text-emerald-400 text-sm">
+          Settings saved successfully.
+        </div>
+      )}
+      {state.error && (
+        <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/25 text-red-600 dark:text-red-400 text-sm">
+          {state.error}
+        </div>
+      )}
+
+      <Section title="Maintenance Mode">
+        <Toggle name="maintenance_enabled" label="Enable maintenance mode" defaultChecked={settings.maintenance_enabled} />
+        <div className="grid sm:grid-cols-2 gap-3">
+          <Textarea
+            name="maintenance_message_es"
+            label="Message — ES"
+            defaultValue={settings.maintenance_message_i18n?.es ?? settings.maintenance_message ?? ''}
+            placeholder="Estamos haciendo mejoras. Volvemos pronto."
+          />
+          <Textarea
+            name="maintenance_message_en"
+            label="Message — EN"
+            defaultValue={settings.maintenance_message_i18n?.en ?? ''}
+            placeholder="We're doing some upgrades. Back soon."
+          />
+        </div>
+      </Section>
+
+      <Section title="Global Banner">
+        <Toggle name="banner_enabled" label="Show banner on site" defaultChecked={settings.banner_enabled} />
+        <div className="grid sm:grid-cols-2 gap-3">
+          <Field name="banner_text_es" label="Banner text — ES" defaultValue={settings.banner_text_i18n?.es ?? settings.banner_text ?? ''} placeholder="🚀 ¡Lanzamos algo nuevo!" />
+          <Field name="banner_text_en" label="Banner text — EN" defaultValue={settings.banner_text_i18n?.en ?? ''} placeholder="🚀 We just launched something new!" />
+        </div>
+        <Field name="banner_link_url" label="Banner link URL (optional)" defaultValue={settings.banner_link_url} placeholder="https://..." />
+      </Section>
+
+      <Section title="Business State">
+        <Toggle name="taking_clients" label="Currently taking new clients" defaultChecked={settings.taking_clients} />
+        <p className="text-xs text-slate-500 dark:text-slate-400">
+          When off, the hero CTA changes to &ldquo;Join the waiting list&rdquo;.
+        </p>
+      </Section>
+
+      <Section title="Contact Links">
+        <div className="grid sm:grid-cols-2 gap-4">
+          <Field name="contact_email" label="Email" defaultValue={settings.contact_email} placeholder="hola@orientallabs.uy" />
+          <Field name="whatsapp_url" label="WhatsApp URL" defaultValue={settings.whatsapp_url} placeholder="https://wa.me/..." />
+          <Field name="instagram_url" label="Instagram URL" defaultValue={settings.instagram_url} placeholder="https://instagram.com/..." />
+          <Field name="github_url" label="GitHub URL" defaultValue={settings.github_url} placeholder="https://github.com/..." />
+          <Field name="linkedin_url" label="LinkedIn URL" defaultValue={settings.linkedin_url} placeholder="https://linkedin.com/..." />
+        </div>
+      </Section>
+
+      <Section title="Homepage Limits">
+        <div className="grid sm:grid-cols-2 gap-4">
+          <Field name="home_projects_limit" label="Max projects shown" type="number" defaultValue={String(settings.home_projects_limit)} placeholder="6" />
+          <Field name="home_reviews_limit" label="Max reviews shown" type="number" defaultValue={String(settings.home_reviews_limit)} placeholder="4" />
+        </div>
+      </Section>
+
+      <div className="flex justify-end">
+        <button
+          type="submit"
+          disabled={pending}
+          className="px-6 py-2.5 rounded-xl bg-electric-400 hover:bg-electric-300 text-navy-950 font-semibold text-sm transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+        >
+          {pending ? 'Saving…' : 'Save Settings'}
+        </button>
+      </div>
+    </form>
+  );
+}

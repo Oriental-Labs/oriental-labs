@@ -1,0 +1,78 @@
+'use server';
+
+import { revalidatePath } from 'next/cache';
+import { createClient } from '@/lib/supabase/server';
+import { invalidateSettingsCache } from '@/lib/settings';
+import { logAudit } from '@/lib/audit';
+
+export async function saveSettingsAction(
+  _prev: { error: string | null; ok: boolean },
+  formData: FormData
+): Promise<{ error: string | null; ok: boolean }> {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) return { error: 'Not authenticated.', ok: false };
+
+  const maintenanceMsgEs = (formData.get('maintenance_message_es') as string) || '';
+  const maintenanceMsgEn = (formData.get('maintenance_message_en') as string) || '';
+  const bannerTextEs = (formData.get('banner_text_es') as string) || '';
+  const bannerTextEn = (formData.get('banner_text_en') as string) || '';
+
+  const payload = {
+    id: 1,
+    maintenance_enabled: formData.get('maintenance_enabled') === 'on',
+    maintenance_message_i18n: { es: maintenanceMsgEs, en: maintenanceMsgEn },
+    banner_enabled: formData.get('banner_enabled') === 'on',
+    banner_text_i18n: { es: bannerTextEs, en: bannerTextEn },
+    banner_link_url: (formData.get('banner_link_url') as string) || null,
+    taking_clients: formData.get('taking_clients') === 'on',
+    contact_email: (formData.get('contact_email') as string) || null,
+    whatsapp_url: (formData.get('whatsapp_url') as string) || null,
+    instagram_url: (formData.get('instagram_url') as string) || null,
+    github_url: (formData.get('github_url') as string) || null,
+    linkedin_url: (formData.get('linkedin_url') as string) || null,
+    home_projects_limit: Math.max(1, parseInt(formData.get('home_projects_limit') as string) || 6),
+    home_reviews_limit: Math.max(1, parseInt(formData.get('home_reviews_limit') as string) || 4),
+  };
+
+  // Fetch current settings to compute diff
+  const { data: current } = await supabase
+    .from('site_settings')
+    .select('*')
+    .eq('id', 1)
+    .single();
+
+  const { error } = await supabase
+    .from('site_settings')
+    .upsert(payload, { onConflict: 'id' });
+
+  if (error) return { error: error.message, ok: false };
+
+  invalidateSettingsCache();
+  revalidatePath('/admin/settings');
+  revalidatePath('/');
+
+  // Log only what changed
+  const diff: Record<string, { from: unknown; to: unknown }> = {};
+  if (current) {
+    for (const key of Object.keys(payload) as (keyof typeof payload)[]) {
+      if (key === 'id') continue;
+      const oldVal = (current as Record<string, unknown>)[key];
+      const newVal = payload[key];
+      if (oldVal !== newVal) diff[key] = { from: oldVal, to: newVal };
+    }
+  }
+
+  await logAudit({
+    action:     'settings.update',
+    actorEmail: user.email ?? 'unknown',
+    entityType: 'settings',
+    metadata:   Object.keys(diff).length ? diff : null,
+  });
+
+  return { error: null, ok: true };
+}

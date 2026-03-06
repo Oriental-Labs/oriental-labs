@@ -1,0 +1,206 @@
+export type Locale = 'en' | 'es';
+
+export const translations = {
+  en: {
+    nav: {
+      home: 'Home',
+      services: 'Services',
+      projects: 'Projects',
+      about: 'About',
+      contact: 'Contact',
+      blog: 'Blog',
+      getInTouch: 'Get in touch',
+    },
+    hero: {
+      badge: 'Open for new projects · Montevideo, Uruguay 🇺🇾',
+      badgeClosed: 'Currently at capacity · Montevideo, Uruguay 🇺🇾',
+      tagline1: 'Web, AI & software products',
+      tagline2: 'built in Uruguay.',
+      ctaProjects: 'View Projects',
+      ctaWhatsapp: 'Contact on WhatsApp',
+      ctaWaiting: 'Join the waiting list',
+      seeServices: 'See our services',
+      codeComment: '// Build something great.',
+      codeDeployed: '✓ Deployed to prod',
+      codeDelivery: '⚡ 2–4 week delivery',
+    },
+    services: {
+      eyebrow: 'What we do',
+      title: 'Services built for modern teams',
+      description:
+        'From early-stage MVPs to enterprise-grade platforms, we craft software that is fast, scalable, and built to last.',
+      processEyebrow: 'Our process',
+      processTitle: 'How we work',
+    },
+    projects: {
+      eyebrow: 'Our work',
+      title: "Projects we're proud of",
+      description:
+        "A selection of products, tools, and experiments we've shipped — from AI assistants to web platforms.",
+      all: 'All',
+      viewDetails: 'View details',
+      featured: 'Featured',
+      noProjects: 'No projects in this category yet.',
+      techStack: 'Tech Stack',
+      liveDemo: 'Live Demo',
+      viewCode: 'View Code',
+      backToProjects: 'Back to projects',
+      contactAboutThis: 'Contact about this',
+    },
+    about: {
+      storyEyebrow: 'Who we are',
+      storyTitle: 'A studio that ships.',
+      storyP1:
+        "Oriental Labs started with a simple idea: build real things that people use. Not prototypes that sit in a drawer, but products that launch, grow, and make a difference.",
+      storyP2:
+        "We are two developers from Uruguay who became obsessed with the intersection of great design, clean code, and AI. Every project we take on becomes a canvas for what thoughtful software engineering can achieve.",
+      storyP3: "From Montevideo to your inbox — we build what others only plan.",
+      teamEyebrow: 'The team',
+      teamTitle: 'Meet the founders',
+      timelineTitle: 'Our story so far',
+    },
+    testimonials: {
+      eyebrow: 'What clients say',
+      title: 'Trusted by people who care about quality',
+      description: "We let our work speak — here's what some of our clients have shared.",
+    },
+    contact: {
+      eyebrow: "Let's work together",
+      title: "Let's build\u00a0something.",
+      description:
+        "Have a project in mind? A question? Just want to say hi?\nWe reply fast.",
+      copy: 'Copy',
+      copied: 'Copied!',
+      notice: 'We typically respond within a few hours.',
+      noSpam: 'No spam, ever.',
+    },
+    techStack: {
+      eyebrow: 'Our tools',
+      title: 'We build with a modern, reliable stack.',
+      frontend: 'Frontend',
+      backend: 'Backend',
+      ai: 'AI & Data',
+      deployment: 'Deployment & DB',
+    },
+    blog: {
+      eyebrow: 'Devlog',
+      title: 'From the lab',
+      description: 'Thoughts, process, and lessons from building real software.',
+      backToBlog: 'Back to blog',
+      relatedPosts: 'Related posts',
+      readMore: 'Read more',
+      searchPlaceholder: 'Search posts...',
+      noPosts: 'No posts found.',
+      publishedOn: 'Published on',
+    },
+    footer: {
+      navigate: 'Navigate',
+      getInTouch: 'Get in Touch',
+      copyright: 'All rights reserved.',
+      builtIn: 'Built in Uruguay 🇺🇾 with Next.js',
+    },
+  },
+
+  es: {
+    nav: {
+      home: 'Inicio',
+      services: 'Servicios',
+      projects: 'Proyectos',
+      about: 'Nosotros',
+      contact: 'Contacto',
+      blog: 'Blog',
+      getInTouch: 'Contáctanos',
+    },
+    hero: {
+      badge: 'Abiertos a nuevos proyectos · Montevideo, Uruguay 🇺🇾',
+      badgeClosed: 'Actualmente sin disponibilidad · Montevideo, Uruguay 🇺🇾',
+      tagline1: 'Productos de web, AI y software',
+      tagline2: 'construidos en Uruguay.',
+      ctaProjects: 'Ver Proyectos',
+      ctaWhatsapp: 'Contactar por WhatsApp',
+      ctaWaiting: 'Unirse a la lista de espera',
+      seeServices: 'Ver nuestros servicios',
+      codeComment: '// Construye algo increíble.',
+      codeDeployed: '✓ En producción',
+      codeDelivery: '⚡ Entrega en 2–4 semanas',
+    },
+    services: {
+      eyebrow: 'Qué hacemos',
+      title: 'Servicios para equipos modernos',
+      description:
+        'Desde MVPs en etapa temprana hasta plataformas empresariales, creamos software rápido, escalable y construido para durar.',
+      processEyebrow: 'Nuestro proceso',
+      processTitle: 'Cómo trabajamos',
+    },
+    projects: {
+      eyebrow: 'Nuestro trabajo',
+      title: 'Proyectos que nos enorgullecen',
+      description:
+        'Una selección de productos, herramientas y experimentos que hemos lanzado — desde asistentes de AI hasta plataformas web.',
+      all: 'Todos',
+      viewDetails: 'Ver detalles',
+      featured: 'Destacado',
+      noProjects: 'No hay proyectos en esta categoría aún.',
+      techStack: 'Stack Tecnológico',
+      liveDemo: 'Demo en Vivo',
+      viewCode: 'Ver Código',
+      backToProjects: 'Volver a proyectos',
+      contactAboutThis: 'Contactar sobre esto',
+    },
+    about: {
+      storyEyebrow: 'Quiénes somos',
+      storyTitle: 'Un estudio que entrega.',
+      storyP1:
+        'Oriental Labs comenzó con una idea simple: construir cosas reales que la gente use. No prototipos que quedan en un cajón, sino productos que se lanzan, crecen y marcan la diferencia.',
+      storyP2:
+        'Somos dos desarrolladores de Uruguay que nos obsesionamos con la intersección del gran diseño, el código limpio y la AI. Cada proyecto que tomamos es un lienzo para lo que la ingeniería de software reflexiva puede lograr.',
+      storyP3: 'Desde Montevideo hasta tu bandeja de entrada — construimos lo que otros solo planean.',
+      teamEyebrow: 'El equipo',
+      teamTitle: 'Conoce a los fundadores',
+      timelineTitle: 'Nuestra historia hasta ahora',
+    },
+    testimonials: {
+      eyebrow: 'Lo que dicen los clientes',
+      title: 'La confianza de quienes valoran la calidad',
+      description:
+        'Dejamos que nuestro trabajo hable — esto es lo que algunos de nuestros clientes han compartido.',
+    },
+    contact: {
+      eyebrow: 'Trabajemos juntos',
+      title: 'Construyamos algo.',
+      description:
+        '¿Tenés un proyecto en mente? ¿Una pregunta? ¿Solo querés saludar?\nRespondemos rápido.',
+      copy: 'Copiar',
+      copied: '¡Copiado!',
+      notice: 'Normalmente respondemos en pocas horas.',
+      noSpam: 'Sin spam, nunca.',
+    },
+    techStack: {
+      eyebrow: 'Nuestras herramientas',
+      title: 'Construimos con un stack moderno y confiable.',
+      frontend: 'Frontend',
+      backend: 'Backend',
+      ai: 'IA & Datos',
+      deployment: 'Despliegue & BD',
+    },
+    blog: {
+      eyebrow: 'Devlog',
+      title: 'Desde el laboratorio',
+      description: 'Ideas, proceso y lecciones de construir software real.',
+      backToBlog: 'Volver al blog',
+      relatedPosts: 'Posts relacionados',
+      readMore: 'Leer más',
+      searchPlaceholder: 'Buscar posts...',
+      noPosts: 'No se encontraron posts.',
+      publishedOn: 'Publicado el',
+    },
+    footer: {
+      navigate: 'Navegar',
+      getInTouch: 'Contáctanos',
+      copyright: 'Todos los derechos reservados.',
+      builtIn: 'Hecho en Uruguay 🇺🇾 con Next.js',
+    },
+  },
+};
+
+export type Translations = typeof translations.en;
