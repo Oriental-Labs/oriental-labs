@@ -53,8 +53,8 @@ export async function saveSettingsAction(
   if (error) return { error: error.message, ok: false };
 
   invalidateSettingsCache();
+  revalidatePath('/', 'layout');
   revalidatePath('/admin/settings');
-  revalidatePath('/');
 
   // Log only what changed
   const diff: Record<string, { from: unknown; to: unknown }> = {};
