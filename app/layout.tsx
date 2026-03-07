@@ -55,17 +55,25 @@ export const metadata: Metadata = {
     creator: SITE.twitterHandle,
     images: ['/og-image.jpg'],
   },
+  // TEMPORARY: Blocks all search engines during development.
+  // Remove this block and restore the one below when launching.
   robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
+    index: false,
+    follow: false,
+    googleBot: { index: false, follow: false },
   },
+  // TODO on launch — replace with:
+  // robots: {
+  //   index: true,
+  //   follow: true,
+  //   googleBot: {
+  //     index: true,
+  //     follow: true,
+  //     'max-video-preview': -1,
+  //     'max-image-preview': 'large',
+  //     'max-snippet': -1,
+  //   },
+  // },
   alternates: {
     canonical: SITE.url,
   },

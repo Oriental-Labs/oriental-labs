@@ -1,0 +1,5 @@
+# TEMPORARY: Blocks all search engines during development.
+# Remove this file and replace with the production version when launching.
+
+User-agent: *
+Disallow: /
