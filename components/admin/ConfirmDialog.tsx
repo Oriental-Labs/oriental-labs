@@ -10,6 +10,7 @@ interface ConfirmDialogProps {
   confirmLabel?: string;
   confirmVariant?: 'danger' | 'warning';
   loading?: boolean;
+  loadingLabel?: string;
   onConfirm: () => void;
   onCancel: () => void;
 }
@@ -21,6 +22,7 @@ export function ConfirmDialog({
   confirmLabel = 'Delete',
   confirmVariant = 'danger',
   loading = false,
+  loadingLabel,
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
@@ -96,7 +98,7 @@ export function ConfirmDialog({
                 : 'bg-amber-500 hover:bg-amber-400 text-white'
             }`}
           >
-            {loading ? 'Deleting…' : confirmLabel}
+            {loading ? (loadingLabel ?? 'Deleting…') : confirmLabel}
           </button>
         </div>
       </div>

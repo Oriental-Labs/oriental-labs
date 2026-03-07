@@ -43,6 +43,8 @@ export function AdminDashboard({ initialPosts }: { initialPosts: Post[] }) {
   const [, startTransition] = useTransition();
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [deleting, startDeleteTransition] = useTransition();
+  const [draftTarget, setDraftTarget] = useState<Post | null>(null);
+  const [drafting, startDraftTransition] = useTransition();
   const router = useRouter();
   const supabase = createClient();
 
@@ -68,6 +70,14 @@ export function AdminDashboard({ initialPosts }: { initialPosts: Post[] }) {
     }
   }
 
+  function handleDraft() {
+    if (!draftTarget) return;
+    startDraftTransition(async () => {
+      await toggleStatus(draftTarget);
+      setDraftTarget(null);
+    });
+  }
+
   function handleDelete(id: string) {
     startDeleteTransition(async () => {
       const { error } = await deletePostAction(id);
@@ -90,7 +100,7 @@ export function AdminDashboard({ initialPosts }: { initialPosts: Post[] }) {
         <ExternalLink size={14} />
       </Link>
       <button
-        onClick={() => toggleStatus(post)}
+        onClick={() => post.status === 'published' ? setDraftTarget(post) : toggleStatus(post)}
         className="p-1.5 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-navy-700/60 transition-colors"
         title={post.status === 'published' ? 'Unpublish' : 'Publish'}
       >
@@ -189,6 +199,18 @@ export function AdminDashboard({ initialPosts }: { initialPosts: Post[] }) {
           </div>
         </div>
       )}
+
+      <ConfirmDialog
+        open={draftTarget !== null}
+        title="Unpublish post?"
+        description={`"${draftTarget?.title_i18n?.es || draftTarget?.title_i18n?.en || draftTarget?.slug}" will be moved to draft and won't be visible to visitors.`}
+        confirmLabel="Move to draft"
+        confirmVariant="warning"
+        loading={drafting}
+        loadingLabel="Moving to draft…"
+        onCancel={() => setDraftTarget(null)}
+        onConfirm={handleDraft}
+      />
 
       <ConfirmDialog
         open={deleteTarget !== null}
