@@ -12,8 +12,8 @@ export const CONTACT = {
   instagramUrl: 'https://instagram.com/orientallabs',
 
   // Email
-  email: 'hola@orientallabs.uy',
-  emailUrl: 'mailto:hola@orientallabs.uy',
+  email: 'admin@orientalabs.dev',
+  emailUrl: 'mailto:admin@orientalabs.dev',
 } as const;
 
 // ─────────────────────────────────────────────────────────────
