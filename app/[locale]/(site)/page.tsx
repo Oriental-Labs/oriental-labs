@@ -41,7 +41,7 @@ export async function generateMetadata({
     openGraph: {
       title,
       description,
-      images: [`/api/og?locale=${locale}`],
+      images: ['/og-image.jpg'],
     },
   };
 }
