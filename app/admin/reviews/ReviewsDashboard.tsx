@@ -45,14 +45,18 @@ export function ReviewsDashboard({ initialReviews }: { initialReviews: Review[] 
   const [, startTransition] = useTransition();
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [deleting, startDeleteTransition] = useTransition();
+  const [statusTarget, setStatusTarget] = useState<Review | null>(null);
   const router = useRouter();
   const supabase = createClient();
 
-  async function toggleStatus(review: Review) {
+  async function confirmToggleStatus() {
+    if (!statusTarget) return;
+    const review = statusTarget;
     const newStatus = review.status === 'published' ? 'draft' : 'published';
     const { error } = await supabase.from('reviews').update({ status: newStatus }).eq('id', review.id);
     if (!error) {
       setReviews((prev) => prev.map((r) => r.id === review.id ? { ...r, status: newStatus as Review['status'] } : r));
+      setStatusTarget(null);
       startTransition(() => router.refresh());
     }
   }
@@ -159,7 +163,7 @@ export function ReviewsDashboard({ initialReviews }: { initialReviews: Review[] 
                   <td className="px-4 py-4 text-slate-500 dark:text-slate-400 text-sm">{formatDate(review.updated_at)}</td>
                   <td className="px-4 py-4">
                     <div className="flex items-center justify-end gap-1">
-                      <button onClick={() => toggleStatus(review)}
+                      <button onClick={() => setStatusTarget(review)}
                         className="p-1.5 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-navy-700/60 transition-colors"
                         title={review.status === 'published' ? 'Unpublish' : 'Publish'}>
                         {review.status === 'published' ? <EyeOff size={14} /> : <Eye size={14} />}
@@ -204,7 +208,7 @@ export function ReviewsDashboard({ initialReviews }: { initialReviews: Review[] 
                       className="p-1.5 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-navy-700/60 transition-colors">
                       <PenLine size={14} />
                     </Link>
-                    <button onClick={() => toggleStatus(review)}
+                    <button onClick={() => setStatusTarget(review)}
                       className="p-1.5 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-navy-700/60 transition-colors">
                       {review.status === 'published' ? <EyeOff size={14} /> : <Eye size={14} />}
                     </button>
@@ -220,6 +224,17 @@ export function ReviewsDashboard({ initialReviews }: { initialReviews: Review[] 
         </div>
       )}
 
+      <ConfirmDialog
+        open={statusTarget !== null}
+        title={statusTarget?.status === 'published' ? 'Unpublish review?' : 'Publish review?'}
+        description={statusTarget?.status === 'published'
+          ? 'This will hide the review from the public site.'
+          : 'This will make the review visible on the public site.'}
+        confirmLabel={statusTarget?.status === 'published' ? 'Unpublish' : 'Publish'}
+        confirmVariant={statusTarget?.status === 'published' ? 'warning' : 'primary'}
+        onCancel={() => setStatusTarget(null)}
+        onConfirm={confirmToggleStatus}
+      />
       <ConfirmDialog
         open={deleteTarget !== null}
         title="Delete review?"

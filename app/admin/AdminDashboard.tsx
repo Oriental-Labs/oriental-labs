@@ -100,7 +100,7 @@ export function AdminDashboard({ initialPosts }: { initialPosts: Post[] }) {
         <ExternalLink size={14} />
       </Link>
       <button
-        onClick={() => post.status === 'published' ? setDraftTarget(post) : toggleStatus(post)}
+        onClick={() => setDraftTarget(post)}
         className="p-1.5 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-navy-700/60 transition-colors"
         title={post.status === 'published' ? 'Unpublish' : 'Publish'}
       >
@@ -202,12 +202,14 @@ export function AdminDashboard({ initialPosts }: { initialPosts: Post[] }) {
 
       <ConfirmDialog
         open={draftTarget !== null}
-        title="Unpublish post?"
-        description={`"${draftTarget?.title_i18n?.es || draftTarget?.title_i18n?.en || draftTarget?.slug}" will be moved to draft and won't be visible to visitors.`}
-        confirmLabel="Move to draft"
-        confirmVariant="warning"
+        title={draftTarget?.status === 'published' ? 'Unpublish post?' : 'Publish post?'}
+        description={draftTarget?.status === 'published'
+          ? `"${draftTarget?.title_i18n?.es || draftTarget?.title_i18n?.en || draftTarget?.slug}" will be moved to draft and won't be visible to visitors.`
+          : `"${draftTarget?.title_i18n?.es || draftTarget?.title_i18n?.en || draftTarget?.slug}" will be published and visible to all visitors.`}
+        confirmLabel={draftTarget?.status === 'published' ? 'Unpublish' : 'Publish'}
+        confirmVariant={draftTarget?.status === 'published' ? 'warning' : 'primary'}
         loading={drafting}
-        loadingLabel="Moving to draft…"
+        loadingLabel={draftTarget?.status === 'published' ? 'Unpublishing…' : 'Publishing…'}
         onCancel={() => setDraftTarget(null)}
         onConfirm={handleDraft}
       />

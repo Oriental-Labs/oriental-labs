@@ -223,6 +223,8 @@ export function ProjectsDashboard({ initialProjects }: { initialProjects: DbProj
         description={statusTarget?.status === 'published'
           ? 'This will hide the project from the public site.'
           : 'This will make the project visible on the public site.'}
+        confirmLabel={statusTarget?.status === 'published' ? 'Unpublish' : 'Publish'}
+        confirmVariant={statusTarget?.status === 'published' ? 'warning' : 'primary'}
         onCancel={() => setStatusTarget(null)}
         onConfirm={confirmToggleStatus}
       />

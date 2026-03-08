@@ -1,14 +1,14 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { AlertTriangle, X } from 'lucide-react';
+import { AlertTriangle, CheckCircle, X } from 'lucide-react';
 
 interface ConfirmDialogProps {
   open: boolean;
   title: string;
   description: string;
   confirmLabel?: string;
-  confirmVariant?: 'danger' | 'warning';
+  confirmVariant?: 'danger' | 'warning' | 'primary';
   loading?: boolean;
   loadingLabel?: string;
   onConfirm: () => void;
@@ -64,8 +64,17 @@ export function ConfirmDialog({
         </button>
 
         <div className="flex items-start gap-3 mb-3">
-          <div className="flex-shrink-0 w-9 h-9 rounded-xl bg-red-500/10 flex items-center justify-center">
-            <AlertTriangle size={16} className="text-red-400" />
+          <div className={`flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center ${
+            confirmVariant === 'primary'
+              ? 'bg-electric-400/10'
+              : confirmVariant === 'warning'
+              ? 'bg-amber-500/10'
+              : 'bg-red-500/10'
+          }`}>
+            {confirmVariant === 'primary'
+              ? <CheckCircle size={16} className="text-electric-400" />
+              : <AlertTriangle size={16} className={confirmVariant === 'warning' ? 'text-amber-400' : 'text-red-400'} />
+            }
           </div>
           <div>
             <h2
@@ -95,7 +104,9 @@ export function ConfirmDialog({
             className={`px-4 py-2 rounded-xl text-sm font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
               confirmVariant === 'danger'
                 ? 'bg-red-500 hover:bg-red-400 text-white'
-                : 'bg-amber-500 hover:bg-amber-400 text-white'
+                : confirmVariant === 'warning'
+                ? 'bg-amber-500 hover:bg-amber-400 text-white'
+                : 'bg-electric-400 hover:bg-electric-300 text-navy-950'
             }`}
           >
             {loading ? (loadingLabel ?? 'Deleting…') : confirmLabel}
