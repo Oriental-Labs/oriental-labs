@@ -153,18 +153,18 @@ export function ProjectPageContent({ project, allProjects, locale, isPreview }: 
 
           <section className="flex flex-wrap items-center gap-3 pt-4 border-t border-navy-700/50">
             {project.live_url && (
-              <Button variant="primary" size="md" href={project.live_url}>
+              <Button variant="primary" size="md" href={project.live_url} target="_blank" rel="noopener noreferrer">
                 <ExternalLink size={15} />
                 {t.projects.liveDemo}
               </Button>
             )}
             {project.github_url && (
-              <Button variant="secondary" size="md" href={project.github_url}>
+              <Button variant="secondary" size="md" href={project.github_url} target="_blank" rel="noopener noreferrer">
                 <Github size={15} />
                 {t.projects.viewCode}
               </Button>
             )}
-            <Button variant="ghost" size="md" href={`${CONTACT.whatsappUrl}?text=${whatsappMsg}`}>
+            <Button variant="ghost" size="md" href={`${CONTACT.whatsappUrl}?text=${whatsappMsg}`} target="_blank" rel="noopener noreferrer">
               <MessageCircle size={15} />
               {t.projects.contactAboutThis}
             </Button>
