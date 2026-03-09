@@ -4,7 +4,10 @@ import { getSiteSettings } from '@/lib/settings';
 import { CONTACT } from '@/lib/constants';
 
 export const dynamic = 'force-dynamic';
-export const metadata = { title: 'Maintenance — Oriental Labs' };
+export const metadata = {
+  title: 'Maintenance — Oriental Labs',
+  robots: { index: false, follow: false },
+};
 
 export default async function MaintenancePage() {
   const settings = await getSiteSettings();

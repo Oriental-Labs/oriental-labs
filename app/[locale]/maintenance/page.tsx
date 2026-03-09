@@ -15,6 +15,7 @@ export async function generateMetadata({
   const { locale } = await params;
   return {
     title: locale === 'es' ? 'Mantenimiento — Oriental Labs' : 'Maintenance — Oriental Labs',
+    robots: { index: false, follow: false },
   };
 }
 
