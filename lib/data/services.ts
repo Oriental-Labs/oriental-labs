@@ -64,29 +64,6 @@ export const services: Service[] = [
     },
   },
   {
-    id: 'ui-ux-design',
-    title: { en: 'UI/UX & Design Systems', es: 'UI/UX y Sistemas de Diseño' },
-    description: {
-      en: 'Pixel-perfect interfaces with a cohesive design language that scales with your team.',
-      es: 'Interfaces pixel-perfect con un lenguaje de diseño cohesivo que escala con tu equipo.',
-    },
-    icon: 'Layers',
-    features: {
-      en: [
-        'Component libraries (Figma + code)',
-        'Brand identity & visual systems',
-        'Accessibility-first design',
-        'Interactive prototypes',
-      ],
-      es: [
-        'Librerías de componentes (Figma + código)',
-        'Identidad de marca y sistemas visuales',
-        'Diseño con foco en accesibilidad',
-        'Prototipos interactivos',
-      ],
-    },
-  },
-  {
     id: 'mvp-prototype',
     title: { en: 'MVP in 2–4 Weeks', es: 'MVP en 2–4 Semanas' },
     description: {
@@ -106,6 +83,52 @@ export const services: Service[] = [
         'Desarrollo full-stack',
         'Despliegue e infraestructura',
         'Soporte de iteración post-lanzamiento',
+      ],
+    },
+  },
+  {
+    id: 'automations',
+    title: { en: 'Automations & Workflows', es: 'Automatizaciones & Workflows' },
+    description: {
+      en: 'Eliminate repetitive tasks. We connect your tools and automate your processes end-to-end.',
+      es: 'Eliminá tareas repetitivas. Conectamos tus herramientas y automatizamos tus procesos de punta a punta.',
+    },
+    icon: 'Repeat',
+    features: {
+      en: [
+        'Workflow automation with n8n',
+        'Scheduled tasks & background jobs',
+        'Automatic notifications & alerts',
+        'Cross-platform data sync',
+      ],
+      es: [
+        'Automatización de flujos con n8n',
+        'Tareas programadas y jobs en background',
+        'Notificaciones y alertas automáticas',
+        'Sincronización de datos entre plataformas',
+      ],
+    },
+  },
+  {
+    id: 'third-party-integrations',
+    title: { en: 'Third-Party Integrations', es: 'Integraciones con Terceros' },
+    description: {
+      en: 'Connect your app with any external service. Payments, emails, maps, CRMs — all wired up.',
+      es: 'Conectá tu app con cualquier servicio externo. Pagos, emails, mapas, CRMs — todo integrado.',
+    },
+    icon: 'Plug',
+    features: {
+      en: [
+        'Payment gateway integrations',
+        'Email & SMS integrations',
+        'Google APIs, Maps & Analytics',
+        'CRM & ERP integrations',
+      ],
+      es: [
+        'Integración de pasarelas de pago',
+        'Integración de email y SMS',
+        'Google APIs, Maps y Analytics',
+        'Integraciones con CRM y ERP',
       ],
     },
   },

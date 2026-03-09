@@ -1,13 +1,13 @@
 'use client';
 
-import { Globe, Sparkles, Layers, Rocket, Zap, ArrowRight } from 'lucide-react';
+import { Globe, Sparkles, Layers, Rocket, Zap, ArrowRight, Repeat, Plug } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { StaggerContainer, StaggerItem, AnimatedSection } from '@/components/ui/AnimatedSection';
 import { useTranslation } from '@/lib/i18n/context';
 import { services, processSteps } from '@/lib/data/services';
 
-const iconMap = { Globe, Sparkles, Layers, Rocket, Zap } as const;
+const iconMap = { Globe, Sparkles, Layers, Rocket, Zap, Repeat, Plug } as const;
 type IconName = keyof typeof iconMap;
 
 export function Services() {

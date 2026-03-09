@@ -26,7 +26,7 @@ const STACKS: { labelKey: 'frontend' | 'backend' | 'ai' | 'deployment'; techs: T
       { name: 'Node.js', icon: '⬡' },
       { name: 'Python', icon: '🐍' },
       { name: 'REST APIs', icon: '⇄' },
-      { name: 'FastAPI', icon: '⚡' },
+      { name: 'n8n', icon: '⚙' },
     ],
   },
   {
@@ -34,17 +34,17 @@ const STACKS: { labelKey: 'frontend' | 'backend' | 'ai' | 'deployment'; techs: T
     techs: [
       { name: 'OpenAI', icon: '◎' },
       { name: 'Claude API', icon: '◇' },
-      { name: 'LangChain', icon: '⛓' },
-      { name: 'TensorFlow', icon: '◈' },
+      { name: 'Anthropic SDK', icon: '◆' },
+      { name: 'Whisper', icon: '🎙' },
     ],
   },
   {
     labelKey: 'deployment',
     techs: [
-      { name: 'Vercel', icon: '▲' },
       { name: 'Supabase', icon: '⚡' },
       { name: 'PostgreSQL', icon: '🐘' },
-      { name: 'Docker', icon: '🐳' },
+      { name: 'Cloudflare Pages', icon: '☁' },
+      { name: 'GitHub Actions', icon: '⚙' },
     ],
   },
 ];
