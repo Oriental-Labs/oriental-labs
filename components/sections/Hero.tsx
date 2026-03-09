@@ -97,6 +97,8 @@ export function Hero({ takingClients = true }: Props) {
               variant="outline"
               size="lg"
               href={`${CONTACT.whatsappUrl}?text=Hi! I found Oriental Labs and would like to talk about a project.`}
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <MessageCircle size={16} />
               {takingClients ? t.hero.ctaWhatsapp : t.hero.ctaWaiting}
