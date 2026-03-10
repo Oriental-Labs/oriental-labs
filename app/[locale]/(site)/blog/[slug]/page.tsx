@@ -69,7 +69,7 @@ export async function generateMetadata({
     description: excerpt || undefined,
     alternates: {
       canonical: `${SITE.url}/${locale}/blog/${slug}`,
-      languages: { es: `${SITE.url}/es/blog/${slug}`, en: `${SITE.url}/en/blog/${slug}` },
+      languages: { es: `${SITE.url}/es/blog/${slug}`, en: `${SITE.url}/en/blog/${slug}`, 'x-default': `${SITE.url}/en/blog/${slug}` },
     },
     openGraph: {
       title: `${title} | ${SITE.name}`,
