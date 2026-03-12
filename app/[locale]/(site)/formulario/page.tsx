@@ -19,6 +19,8 @@ export async function generateMetadata({
     ? 'Contáctanos para hablar sobre tu proyecto.'
     : 'Get in touch to talk about your project.';
 
+  const ogImage = `/api/og?type=home&title=${encodeURIComponent(isEs ? 'Hablemos.' : "Let's talk.")}&subtitle=${encodeURIComponent(description)}`;
+
   return {
     title,
     description,
@@ -29,6 +31,18 @@ export async function generateMetadata({
         en: `${SITE.url}/en/formulario`,
         'x-default': `${SITE.url}/en/formulario`,
       },
+    },
+    openGraph: {
+      title: `${isEs ? 'Formulario de contacto' : 'Contact form'} | ${SITE.name}`,
+      description,
+      url: `${SITE.url}/${locale}/formulario`,
+      images: [{ url: ogImage, width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: 'summary_large_image' as const,
+      title: `${isEs ? 'Formulario de contacto' : 'Contact form'} | ${SITE.name}`,
+      description,
+      images: [ogImage],
     },
   };
 }

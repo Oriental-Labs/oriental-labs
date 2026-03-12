@@ -105,5 +105,33 @@ export default async function BlogPostPage({
 
   const related = await getRelatedPosts(post.id, post.tags);
 
-  return <BlogPostContent post={post} relatedPosts={related} isPreview={isPreview} locale={locale as Locale} />;
+  const title = pickI18n(post.title_i18n, locale as Locale);
+  const excerpt = pickI18n(post.excerpt_i18n, locale as Locale);
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description: excerpt || undefined,
+    datePublished: post.published_at ?? undefined,
+    dateModified: post.published_at ?? undefined,
+    publisher: {
+      '@type': 'Organization',
+      name: 'Oriental Labs',
+      url: SITE.url,
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `${SITE.url}/${locale}/blog/${slug}`,
+    },
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <BlogPostContent post={post} relatedPosts={related} isPreview={isPreview} locale={locale as Locale} />
+    </>
+  );
 }

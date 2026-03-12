@@ -39,6 +39,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
       alternates: { languages: altLanguages('/blog') },
     },
+    {
+      url: `${SITE.url}/${locale}/formulario`,
+      lastModified: new Date(),
+      changeFrequency: 'yearly' as const,
+      priority: 0.5,
+      alternates: { languages: altLanguages('/formulario') },
+    },
   ]);
 
   const postRoutes: MetadataRoute.Sitemap = (posts ?? []).flatMap((post) =>

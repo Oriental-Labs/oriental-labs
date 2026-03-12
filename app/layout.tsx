@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { headers } from 'next/headers';
 import { Providers } from './providers';
 import { RouteProgress } from '@/components/ui/RouteProgress';
 import { SITE } from '@/lib/constants';
@@ -114,13 +115,17 @@ const jsonLd = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const h = await headers();
+  const pathname = h.get('x-pathname') ?? '';
+  const lang = pathname.startsWith('/es') ? 'es' : 'en';
+
   return (
-    <html lang="en" suppressHydrationWarning className={inter.variable}>
+    <html lang={lang} suppressHydrationWarning className={inter.variable}>
       <head>
         <script
           type="application/ld+json"

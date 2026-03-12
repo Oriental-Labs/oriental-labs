@@ -3,6 +3,8 @@ import { SITE } from '@/lib/constants';
 import { BlogIndex } from './BlogIndex';
 import type { Locale } from '@/lib/i18n/translations';
 
+export const revalidate = 3600;
+
 export async function generateMetadata({
   params,
 }: {

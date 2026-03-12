@@ -16,20 +16,31 @@ export function ContactForm() {
   const [budget,      setBudget]      = useState('');
   const [timeline,    setTimeline]    = useState('');
   const [website,     setWebsite]     = useState('');
+  const [honeypot,    setHoneypot]    = useState('');
   const [status,      setStatus]      = useState<'idle' | 'loading' | 'success' | 'error' | 'limit'>('idle');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (honeypot) return; // silently discard bot submissions
     setStatus('loading');
 
-    const res = await fetch('/api/contact', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, message, projectType, budget, timeline, website }),
-    });
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
 
-    if (res.status === 429) { setStatus('limit'); return; }
-    setStatus(res.ok ? 'success' : 'error');
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, message, projectType, budget, timeline, website }),
+        signal: controller.signal,
+      });
+      if (res.status === 429) { setStatus('limit'); return; }
+      setStatus(res.ok ? 'success' : 'error');
+    } catch {
+      setStatus('error');
+    } finally {
+      clearTimeout(timeout);
+    }
   };
 
   const inputCls =
@@ -56,6 +67,18 @@ export function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full max-w-lg mx-auto">
+
+      {/* Honeypot — hidden from humans, filled by bots */}
+      <input
+        type="text"
+        name="_gotcha"
+        value={honeypot}
+        onChange={e => setHoneypot(e.target.value)}
+        tabIndex={-1}
+        aria-hidden="true"
+        autoComplete="off"
+        className="absolute -left-[9999px] -top-[9999px] w-0 h-0 opacity-0 pointer-events-none"
+      />
 
       {/* Name */}
       <div>
@@ -151,12 +174,18 @@ export function ContactForm() {
 
       {/* Message */}
       <div>
-        <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5 block">
-          {f.messageLabel}
-        </label>
+        <div className="flex items-center justify-between mb-1.5">
+          <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            {f.messageLabel}
+          </label>
+          <span className={`text-xs tabular-nums ${message.length > 450 ? 'text-amber-400' : 'text-slate-600'}`}>
+            {message.length} / 500
+          </span>
+        </div>
         <textarea
           required
           rows={4}
+          maxLength={500}
           value={message}
           onChange={e => setMessage(e.target.value)}
           placeholder={f.messagePlaceholder}

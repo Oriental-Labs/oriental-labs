@@ -110,7 +110,9 @@ export async function middleware(request: NextRequest) {
     // Fail open — never block the site due to a settings error
   }
 
-  return NextResponse.next();
+  const res = NextResponse.next();
+  res.headers.set('x-pathname', pathname);
+  return res;
 }
 
 export const config = {

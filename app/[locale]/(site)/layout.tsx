@@ -1,6 +1,7 @@
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { GlobalBanner } from '@/components/ui/GlobalBanner';
+import { ScrollToTop } from '@/components/ui/ScrollToTop';
 import { getSiteSettings } from '@/lib/settings';
 import { pickI18n } from '@/lib/i18n-content';
 import type { Locale } from '@/lib/i18n/translations';
@@ -31,6 +32,7 @@ export default async function SiteLayout({
       <Navbar />
       <main id="main-content">{children}</main>
       <Footer />
+      <ScrollToTop />
     </>
   );
 }
