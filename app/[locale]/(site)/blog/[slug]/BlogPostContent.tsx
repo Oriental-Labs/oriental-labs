@@ -1,13 +1,15 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowLeft, Calendar, Tag, ArrowRight } from 'lucide-react';
+import { Calendar, Tag, ArrowRight, Copy } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { useTranslation } from '@/lib/i18n/context';
 import { pickI18n, pickI18nMedia } from '@/lib/i18n-content';
 import type { Locale } from '@/lib/i18n/translations';
+import { SITE } from '@/lib/constants';
 
 interface Post {
   id: string;
@@ -30,6 +32,12 @@ function formatDate(dateStr: string | null, locale: Locale) {
   );
 }
 
+function readingTime(content: string, locale: Locale): string {
+  const words = content.trim().split(/\s+/).filter(Boolean).length;
+  const minutes = Math.max(1, Math.ceil(words / 200));
+  return locale === 'es' ? `${minutes} min de lectura` : `${minutes} min read`;
+}
+
 export function BlogPostContent({
   post,
   relatedPosts,
@@ -48,6 +56,18 @@ export function BlogPostContent({
   const content = pickI18n(post.content_i18n, locale);
   const coverImage = pickI18nMedia(post.cover_image_url_i18n, locale) || post.cover_image_url || '';
 
+  const [copied, setCopied] = useState(false);
+  const postUrl = `${SITE.url}/${locale}/blog/${post.slug}`;
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(postUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const twitterShareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(postUrl)}&text=${encodeURIComponent(title)}`;
+  const whatsappShareUrl = `https://wa.me/?text=${encodeURIComponent(title + ' — ' + postUrl)}`;
+
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-navy-950 pt-24 pb-24">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -57,13 +77,17 @@ export function BlogPostContent({
           </div>
         )}
 
-        <Link
-          href={`/${locale}/blog`}
-          className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-electric-400 transition-colors mb-8"
-        >
-          <ArrowLeft size={14} />
-          {t.blog.backToBlog}
-        </Link>
+        <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-slate-500 mb-8">
+          <Link href={`/${locale}`} className="hover:text-electric-400 transition-colors">
+            {t.nav.home}
+          </Link>
+          <span>/</span>
+          <Link href={`/${locale}/blog`} className="hover:text-electric-400 transition-colors">
+            Blog
+          </Link>
+          <span>/</span>
+          <span className="text-slate-300 truncate max-w-[200px] sm:max-w-xs">{title}</span>
+        </nav>
 
         {coverImage && (
           <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden bg-navy-800 mb-8">
@@ -96,12 +120,17 @@ export function BlogPostContent({
             <p className="text-slate-400 text-lg leading-relaxed mb-4">{excerpt}</p>
           )}
 
-          {post.published_at && (
-            <p className="flex items-center gap-1.5 text-slate-500 text-sm">
-              <Calendar size={13} />
-              {t.blog.publishedOn} {formatDate(post.published_at, locale)}
-            </p>
-          )}
+          <div className="flex items-center gap-4 flex-wrap text-slate-500 text-sm">
+            {post.published_at && (
+              <span className="flex items-center gap-1.5">
+                <Calendar size={13} />
+                {t.blog.publishedOn} {formatDate(post.published_at, locale)}
+              </span>
+            )}
+            {content && (
+              <span>{readingTime(content, locale)}</span>
+            )}
+          </div>
         </header>
 
         <div className="border-t border-navy-700/50 mb-8" />
@@ -109,6 +138,35 @@ export function BlogPostContent({
         <article className="prose dark:prose-invert prose-slate max-w-none prose-headings:font-bold dark:prose-headings:text-white prose-p:leading-relaxed prose-a:text-electric-400 prose-a:no-underline hover:prose-a:underline prose-code:text-electric-400 dark:prose-code:bg-navy-800/60 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:before:content-none prose-code:after:content-none dark:prose-pre:bg-navy-800/80 dark:prose-pre:border dark:prose-pre:border-navy-600/40 prose-blockquote:border-l-electric-400 dark:prose-blockquote:text-slate-400 dark:prose-li:text-slate-300 dark:prose-strong:text-white dark:prose-hr:border-navy-700/50">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
         </article>
+
+        <div className="mt-10 pt-8 border-t border-navy-700/50">
+          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">{t.blog.share}</p>
+          <div className="flex items-center gap-2 flex-wrap">
+            <button
+              onClick={handleCopy}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-navy-800/60 border border-navy-600/50 text-slate-400 hover:text-white text-sm transition-colors"
+            >
+              <Copy size={13} />
+              {copied ? t.blog.copied : t.blog.copyLink}
+            </button>
+            <a
+              href={twitterShareUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-navy-800/60 border border-navy-600/50 text-slate-400 hover:text-white text-sm transition-colors"
+            >
+              {t.blog.shareOnX}
+            </a>
+            <a
+              href={whatsappShareUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-navy-800/60 border border-navy-600/50 text-slate-400 hover:text-white text-sm transition-colors"
+            >
+              {t.blog.shareOnWhatsApp}
+            </a>
+          </div>
+        </div>
 
         {relatedPosts.length > 0 && (
           <div className="mt-16 pt-8 border-t border-navy-700/50">

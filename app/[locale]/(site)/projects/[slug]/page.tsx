@@ -48,7 +48,14 @@ export async function generateMetadata({
     openGraph: {
       title: `${title} | ${SITE.name}`,
       description,
+      type: 'website',
       images: [{ url: ogUrl, width: 1200, height: 630, alt: title }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${title} | ${SITE.name}`,
+      description,
+      images: [ogUrl],
     },
   };
 }
@@ -85,5 +92,20 @@ export default async function ProjectPage({
   if (!project) notFound();
   const allProjects = await getPublishedProjects();
 
-  return <ProjectPageContent project={project} allProjects={allProjects} locale={locale as Locale} />;
+  const title = pickI18n(project.title_i18n, locale as Locale) || project.title || project.slug;
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: locale === 'es' ? 'Proyectos' : 'Projects', item: `${SITE.url}/${locale}/#projects` },
+      { '@type': 'ListItem', position: 2, name: title, item: `${SITE.url}/${locale}/projects/${slug}` },
+    ],
+  };
+
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+      <ProjectPageContent project={project} allProjects={allProjects} locale={locale as Locale} />
+    </>
+  );
 }

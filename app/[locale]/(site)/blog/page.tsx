@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { SITE } from '@/lib/constants';
 import { BlogIndex } from './BlogIndex';
+import { createStaticClient } from '@/lib/supabase/server';
 import type { Locale } from '@/lib/i18n/translations';
 
 export const revalidate = 3600;
@@ -38,5 +39,13 @@ export default async function BlogPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  return <BlogIndex locale={locale as Locale} />;
+
+  const supabase = createStaticClient();
+  const { data: posts } = await supabase
+    .from('posts')
+    .select('id, slug, tags, published_at, title_i18n, excerpt_i18n')
+    .eq('status', 'published')
+    .order('published_at', { ascending: false });
+
+  return <BlogIndex locale={locale as Locale} posts={posts ?? []} />;
 }

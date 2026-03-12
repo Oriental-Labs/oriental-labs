@@ -358,6 +358,22 @@ export function PostEditor({ initial }: Props) {
               className={`${inputClass} font-mono leading-relaxed resize-y`}
             />
           </div>
+
+          {/* OG Preview */}
+          {(langTab === 'es' ? form.title : form.title_en) && (
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-1.5">
+                OG Preview <span className="text-slate-500 font-normal">(how it looks when shared)</span>
+              </label>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`/api/og?type=blog&title=${encodeURIComponent(langTab === 'es' ? form.title : (form.title_en || form.title))}&subtitle=${encodeURIComponent(langTab === 'es' ? form.excerpt : (form.excerpt_en || form.excerpt))}`}
+                alt="OG preview"
+                className="w-full rounded-xl border border-navy-600/50"
+                style={{ aspectRatio: '1200/630' }}
+              />
+            </div>
+          )}
         </div>
       )}
 

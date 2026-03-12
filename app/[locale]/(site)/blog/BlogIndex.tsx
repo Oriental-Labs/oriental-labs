@@ -1,16 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Search, Calendar, ArrowRight, X } from 'lucide-react';
-import { createClient } from '@/lib/supabase/client';
 import { AnimatedSection } from '@/components/ui/AnimatedSection';
 import { useTranslation } from '@/lib/i18n/context';
 import { pickI18n } from '@/lib/i18n-content';
 import type { Locale } from '@/lib/i18n/translations';
 
-interface Post {
+export interface Post {
   id: string;
   slug: string;
   tags: string[];
@@ -30,27 +29,13 @@ function formatDate(dateStr: string | null, locale: Locale) {
 
 interface Props {
   locale: Locale;
+  posts: Post[];
 }
 
-export function BlogIndex({ locale }: Props) {
+export function BlogIndex({ locale, posts }: Props) {
   const { t } = useTranslation();
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState('');
   const [activeTag, setActiveTag] = useState<string | null>(null);
-
-  useEffect(() => {
-    const supabase = createClient();
-    supabase
-      .from('posts')
-      .select('id, slug, tags, published_at, title_i18n, excerpt_i18n')
-      .eq('status', 'published')
-      .order('published_at', { ascending: false })
-      .then(({ data }) => {
-        setPosts(data ?? []);
-        setLoading(false);
-      });
-  }, []);
 
   const allTags = Array.from(new Set(posts.flatMap((p) => p.tags))).sort();
 
@@ -105,13 +90,7 @@ export function BlogIndex({ locale }: Props) {
           </div>
         )}
 
-        {loading ? (
-          <div className="space-y-4">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="h-32 rounded-2xl bg-slate-200 dark:bg-navy-800/40 border border-slate-200 dark:border-navy-700/30 animate-pulse" />
-            ))}
-          </div>
-        ) : filtered.length === 0 ? (
+        {filtered.length === 0 ? (
           <p className="text-slate-500 text-center py-12">{t.blog.noPosts}</p>
         ) : (
           <div className="space-y-4">
