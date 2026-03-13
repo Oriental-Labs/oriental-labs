@@ -3,8 +3,6 @@ import type { Locale } from '@/lib/i18n/translations';
 import { SITE } from '@/lib/constants';
 import { LanguageProvider } from '@/lib/i18n/context';
 import { ContactForm } from '@/components/sections/ContactForm';
-import { Navbar } from '@/components/layout/Navbar';
-import { Footer } from '@/components/layout/Footer';
 import { Mail } from 'lucide-react';
 
 export async function generateMetadata({
@@ -57,8 +55,7 @@ export default async function FormularioPage({
 
   return (
     <LanguageProvider initialLocale={locale as Locale}>
-      <Navbar />
-      <main className="min-h-screen bg-navy-950 pt-28 pb-24 px-4">
+      <div className="min-h-screen bg-navy-950 pt-28 pb-24 px-4">
         <div className="max-w-lg mx-auto">
 
           <div className="flex flex-col items-center text-center mb-10 gap-4">
@@ -77,8 +74,7 @@ export default async function FormularioPage({
 
           <ContactForm />
         </div>
-      </main>
-      <Footer />
+      </div>
     </LanguageProvider>
   );
 }
